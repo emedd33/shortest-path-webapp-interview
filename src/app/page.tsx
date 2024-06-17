@@ -42,9 +42,16 @@ export default function Home() {
     // creates the nodes and graph for the react flow
     if (graph) {
       
-      const nodes = graph.map(([from, to, weight],index) => {
+      const fromNodes = graph.map(([from, to, weight],index) => {
         return { id: from, position: { x: Math.random()*1000, y: Math.random()*1000 }, data: { label: from } };
       });
+      const toNodes = graph.map(([from, to, weight],index) => {
+        return { id: to, position: { x: Math.random()*1000, y: Math.random()*1000 }, data: { label: to } };
+      })
+      // merges the nodes but makes sure that there are no duplicates
+      // @ts-ignore
+      const nodes = [...new Set([...fromNodes, ...toNodes])];
+
       
       const edges = graph.map(([from, to, weight]) => {
         if (shortestDistance && shortestPath && shortestPath.includes(from) && shortestPath.includes(to)){
@@ -75,7 +82,7 @@ export default function Home() {
                   const graph = content.split("\n").slice(1).map((line) => {
                     const [from, to, weight] = line.split(";");
                     return [from, to, weight];
-                  });
+                  });console.log(graph);
                   setGraph(graph);
                 }
               };
