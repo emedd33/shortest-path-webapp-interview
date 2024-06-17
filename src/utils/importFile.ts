@@ -40,7 +40,7 @@ const importCsvFile = (filePath: string) => {
         
         const graph = fileContent.split('\n').slice(1).map((line) => {
             const [from, to, weight] = line.split(';');
-            return [from, to, parseInt(weight)];
+            return [from, to, weight];
         });
         return graph;
     } catch (error) {
