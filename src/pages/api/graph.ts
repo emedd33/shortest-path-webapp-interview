@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { dijkstra } from '../../utils/dijkstra';
+import { dijkstra } from '../../utils/djistra';
 
 type ResponseData = {
   shortestPath: string[];
