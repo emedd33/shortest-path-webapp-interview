@@ -1,0 +1,1 @@
+const renderGraph = (graph: Graph) => {}

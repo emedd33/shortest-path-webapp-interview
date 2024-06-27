@@ -26,7 +26,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/api/route"
+    "src/app/api/route",
+    "src/components/graph/forceGraph.js"
   ],
   "exclude": ["node_modules"]
 }
