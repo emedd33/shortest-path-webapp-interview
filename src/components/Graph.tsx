@@ -2,7 +2,7 @@ import { ShortestPathGraph } from '@/types'
 import { useEffect, useRef } from 'react'
 import { getGraphEdges, getGraphNodes } from './utils'
 import styled from 'styled-components'
-import {Graph} from '@antv/g6'
+import { Graph } from '@antv/g6'
 
 const GraphComponents = ({
   graphData,
