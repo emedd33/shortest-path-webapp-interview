@@ -47,7 +47,7 @@ function dijkstra(
   startNode: StartNode,
   endNode: EndNode,
 ) {
-  // initiliaze the distances, previous nodes and visited nodes
+  // initialize the adjacency list
   const adjacencyList = createAdjacencyList(graph)
   const distances = new Map()
   const previousNodes = new Map()

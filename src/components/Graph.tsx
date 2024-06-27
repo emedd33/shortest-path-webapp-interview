@@ -1,13 +1,11 @@
 import { ShortestPathGraph } from '@/types'
-// @ts-ignore
-import G6 from '@antv/g6'
 import { useEffect, useRef } from 'react'
 import { getGraphEdges, getGraphNodes } from './utils'
 import styled from 'styled-components'
+import {Graph} from '@antv/g6'
 
 const GraphComponents = ({
   graphData,
-  onNodeClick,
   startNode,
   endNode,
   shortestPath,
@@ -18,7 +16,7 @@ const GraphComponents = ({
   endNode: string | null
   shortestPath: string[] | null
 }) => {
-  const graphRef = useRef<G6.Graph | null>(null)
+  const graphRef = useRef<Graph | null>(null)
   useEffect(() => {
     if (!document) return
     if (!graphData) return
@@ -26,7 +24,7 @@ const GraphComponents = ({
     const graphEdges = getGraphEdges(graphData, shortestPath)
 
     if (!graphRef.current) {
-      const graph = new G6.Graph({
+      const graph = new Graph({
         container: 'container',
         width: 1080,
         height: 920,
@@ -68,6 +66,7 @@ const GraphComponents = ({
     graphRef.current.render()
 
     graphRef.current.on('node:dragstart', function (e: any) {
+      if (!graphRef.current) return
       graphRef.current.layout()
       refreshDragedNodePosition(e)
     })

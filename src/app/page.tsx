@@ -1,13 +1,10 @@
 'use client' // This is a client component
 
 import { Alert, Button, ButtonGroup, Input } from '@mui/material'
-import { useEffect, useState } from 'react'
-import ReactFlow from 'reactflow'
-import backendService from '@/backendService'
 import GraphComponents from '@/components/Graph'
-import { ShortestPathGraph } from '@/types'
 import { useStateManagement } from '@/stateManagement'
 import styled from 'styled-components'
+import backendService from '@/backendService'
 
 export default function Home() {
   const {
@@ -88,19 +85,19 @@ export default function Home() {
       <h1>Shortest path</h1>
       <p>
         Welcome to the shortest path website! to get started upload a csv file
-        with the format:
+        
+        Example of CSV file:
         <br />
+        <code>from;to;weight;A;B;5</code>
         <br />
-        <code>from;to;weight</code>
-        <br />
-        <br />
-        Example:
-        <br />
-        <code>from;to;weight</code>
-        <code>A;B;5</code>
+        Then select the start and end node and click on the button to find the
+        shortest path
       </p>
-      Then select the start and end node and click on the button to find the
-      shortest path
+      {!!error && (
+        <Alert severity="error" onClose={() => setError('')}>
+          {error}
+        </Alert>
+      )}
       <ButtonGroup variant="contained" aria-label="Basic button group">
         <Button>
           <input
