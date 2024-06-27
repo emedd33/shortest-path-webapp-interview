@@ -14,3 +14,6 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+
+This application is also deployed on Vercel with the following link!
+[shortest path webb app](https://shortest-path-webapp-interview.vercel.app/)
