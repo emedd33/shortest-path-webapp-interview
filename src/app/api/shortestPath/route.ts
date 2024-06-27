@@ -1,10 +1,16 @@
-import { StartNode, EndNode, Graph, Distance, ShortestPath } from '@/types'
+import {
+  StartNode,
+  EndNode,
+  ShortestPathGraph,
+  Distance,
+  ShortestPath,
+} from '@/types'
 import { dijkstra } from '@/utils/dijkstra'
 
 type RequestBody = {
   startNode: StartNode
   endNode: EndNode
-  graph: Graph
+  graph: ShortestPathGraph
 }
 
 export async function POST(request: Request) {

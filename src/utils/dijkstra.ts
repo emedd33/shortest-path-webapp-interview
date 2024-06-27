@@ -1,4 +1,7 @@
 // Helper function to create an adjacency list from the graph
+
+import { EndNode, ShortestPathGraph, StartNode } from '@/types'
+
 // this function is used to create a map of the graph so we can easily access the nodes and their weights
 function createAdjacencyList(graph: string[][]) {
   const adjacencyList: Map<string, { node: string; weight: number }[]> =
@@ -39,7 +42,11 @@ function getMinDistanceNode(
 }
 
 // Dijkstra's algorithm
-function dijkstra(graph: string[][], startNode: string, endNode: string) {
+function dijkstra(
+  graph: ShortestPathGraph,
+  startNode: StartNode,
+  endNode: EndNode,
+) {
   // initiliaze the distances, previous nodes and visited nodes
   const adjacencyList = createAdjacencyList(graph)
   const distances = new Map()

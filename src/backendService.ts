@@ -1,8 +1,10 @@
+import { ShortestPathGraph } from './types'
+
 class BackendService {
   public async getShortestPathDijkstra(
     startNode: string,
     endNode: string,
-    graph: any,
+    graph: ShortestPathGraph,
   ) {
     const response = await fetch('/api/shortestPath', {
       method: 'POST',

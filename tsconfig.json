@@ -29,5 +29,5 @@
     "src/app/api/route",
     "src/components/graph/forceGraph.js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "src/stateManagement.ts"]
 }

@@ -5,17 +5,37 @@ import { useEffect, useState } from 'react'
 import ReactFlow from 'reactflow'
 import backendService from '@/backendService'
 import GraphComponents from '@/components/Graph'
+import { ShortestPathGraph } from '@/types'
+import { useStateManagement } from '@/stateManagement'
+import styled from 'styled-components'
 
 export default function Home() {
-  const [graphData, setGraphData] = useState<null | string[][]>(null)
+  const {
+    graphData,
+    setGraphData,
+    startNode,
+    setStartNode,
+    endNode,
+    setEndNode,
+    error,
+    setError,
+    shortestPath,
+    setShortestPath,
+  } = useStateManagement()
 
-  const [shortestPath, setShortestPath] = useState<string[] | null>(null)
-  const [shortestDistance, setShortestDistance] = useState<number | null>(null)
-  const [startNode, setStartNode] = useState<string | null>(null)
-  const [endNode, setEndNode] = useState<string | null>(null)
-  const [reactFlowNodes, setReactFlowNodes] = useState<any>(null)
-  const [reactFlowEdges, setReactFlowEdges] = useState<any>(null)
-  const [error, setError] = useState<string | null>(null)
+  // -------- functions
+  const onNodeClick = (node: string) => {
+    if (!startNode) {
+      setStartNode(node)
+      return
+    }
+    if (!endNode) {
+      setEndNode(node)
+      return
+    }
+    setEndNode(null)
+    setStartNode(null)
+  }
 
   const onShortestPathClick = async () => {
     if (!graphData || !startNode || !endNode) {
@@ -27,7 +47,13 @@ export default function Home() {
       endNode,
       graphData,
     )
+    if (res.error) {
+      setError(res.error)
+      return
+    }
+    setShortestPath(res.path)
   }
+
   const onFileUploaded = (file?: File) => {
     if (!file) {
       setError('Missing file')
@@ -38,43 +64,109 @@ export default function Home() {
     reader.onload = (e) => {
       const content = e.target?.result
       if (typeof content === 'string') {
-        const graph = content
+        const loadedGraph = content
           .split('\n')
           .slice(1)
           .map((line) => {
             const [from, to, weight] = line.split(';')
             return [from, to, weight]
           })
-        setGraph(graph)
+        setGraphData(loadedGraph)
       }
     }
     reader.readAsText(file)
   }
+  const onStartNodeChange = (node: string) => {
+    setStartNode(node)
+  }
+  const onEndNodeChange = (node: string) => {
+    setEndNode(node)
+  }
 
   return (
-    <main>
-      <div
-        style={{
-          width: '100%',
-          display: 'grid',
-          gridTemplateColumns: '1fr',
-          justifyContent: 'center',
-        }}
-      >
-        <h1>Shortest Path</h1>
-        <ButtonGroup variant="contained" aria-label="Basic button group">
-          <Button>
-            <input
-              type="file"
-              onChange={(e) => {
-                const file = e.target.files?.[0]
-                onFileUploaded(file)
-              }}
-            />
-          </Button>
-        </ButtonGroup>
-        <GraphComponents graphData={graphData} />
-      </div>
-    </main>
+    <MainContainer>
+      <h1>Shortest path</h1>
+      <p>
+        Welcome to the shortest path website! to get started upload a csv file
+        with the format:
+        <br />
+        <br />
+        <code>from;to;weight</code>
+        <br />
+        <br />
+        Example:
+        <br />
+        <code>from;to;weight</code>
+        <code>A;B;5</code>
+      </p>
+      Then select the start and end node and click on the button to find the
+      shortest path
+      <ButtonGroup variant="contained" aria-label="Basic button group">
+        <Button>
+          <input
+            type="file"
+            onChange={(e) => {
+              const file = e.target.files?.[0]
+              onFileUploaded(file)
+            }}
+          />
+        </Button>
+        <InputContainer>
+          <TextInput
+            placeholder="Start"
+            value={startNode}
+            onChange={(e) => onStartNodeChange(e.target.value)}
+          />
+        </InputContainer>
+        <InputContainer>
+          <TextInput
+            placeholder="End"
+            value={endNode}
+            onChange={(e) => onEndNodeChange(e.target.value)}
+          />
+        </InputContainer>
+
+        <ShortestPathButton
+          onClick={onShortestPathClick}
+          disabled={!startNode || !endNode || !graphData}
+        >
+          Find shortest path
+        </ShortestPathButton>
+      </ButtonGroup>
+      {graphData && (
+        <GraphComponents
+          graphData={graphData}
+          onNodeClick={onNodeClick}
+          shortestPath={shortestPath}
+          startNode={startNode}
+          endNode={endNode}
+        />
+      )}
+    </MainContainer>
   )
 }
+
+const MainContainer = styled.main`
+  padding: 20px;
+  border-radius: 10px;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+`
+const InputContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  width: 50px;
+  background-color: white;
+`
+
+const TextInput = styled(Input)`
+  input {
+    text-align: center;
+  }
+`
+const InputButtonGroup = styled(ButtonGroup)``
+
+const ShortestPathButton = styled(Button)`
+  height: 50px;
+`
