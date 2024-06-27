@@ -1,6 +1,7 @@
 'use client' // This is a client component
+import HelpIcon from '@mui/icons-material/Help';
 
-import { Alert, Button, ButtonGroup, Input } from '@mui/material'
+import { Alert, Button, ButtonGroup, Input, Tooltip } from '@mui/material'
 import GraphComponents from '@/components/Graph'
 import { useStateManagement } from '@/stateManagement'
 import styled from 'styled-components'
@@ -18,6 +19,8 @@ export default function Home() {
     setError,
     shortestPath,
     setShortestPath,
+    shortestDistance,
+    setShortestDistance
   } = useStateManagement()
 
   // -------- functions
@@ -49,6 +52,7 @@ export default function Home() {
       return
     }
     setShortestPath(res.path)
+    setShortestDistance(res.distance)
   }
 
   const onFileUploaded = (file?: File) => {
@@ -84,14 +88,7 @@ export default function Home() {
     <MainContainer>
       <h1>Shortest path</h1>
       <p>
-        Welcome to the shortest path website! to get started upload a csv file
-        
-        Example of CSV file:
-        <br />
-        <code>from;to;weight;A;B;5</code>
-        <br />
-        Then select the start and end node and click on the button to find the
-        shortest path
+        Welcome to the shortest path website! to get started upload a csv file with the format of the graph data <Tooltip title="The format of the data is a semicolon seperated file in chunks of 3, where each list contains the start node, the end node and the weight of the edge example: From:To:Weight;A;B;5;A;C;15"><HelpIcon/></Tooltip>
       </p>
       {!!error && (
         <Alert severity="error" onClose={() => setError('')}>
@@ -130,6 +127,12 @@ export default function Home() {
           Find shortest path
         </ShortestPathButton>
       </ButtonGroup>
+      {shortestPath && (
+        <Alert severity="success">
+          Shortest path is {shortestPath.join(' -> ')} with a distance of{' '} {shortestDistance}
+        </Alert>
+      
+      )}
       {graphData && (
         <GraphComponents
           graphData={graphData}
